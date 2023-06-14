@@ -1,3 +1,5 @@
+**This github repo is a mirror link to my gitea instance running on my server**
+
 # Solutions for picoCTF's challenges
 
 These are my personal solutions to the challenges on picoCTF's website.
