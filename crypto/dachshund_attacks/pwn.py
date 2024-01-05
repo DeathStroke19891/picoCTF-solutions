@@ -64,17 +64,5 @@ d=8129668150927448428161779772739579577962732011125362176025550024471632761907
 
 
 uc=198614235373674103788888306985643587194108045477674049828439422174745801853
-hexs = ""
 
-def decTohex(n):
-	if (n == 0):
-		return "0"
-	r = n % 16;
-	global hexs
-	hexs = hexs + hex(r)[2:]
-	n //= 16
-	decTohex(n)
-
-decTohex(uc)
-hexs = hexs[::-1]
-print(bytearray.fromhex(hexs).decode())
+print(bytearray.fromhex(format(uc, 'x')).decode())
