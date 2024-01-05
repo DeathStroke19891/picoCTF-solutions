@@ -1,13 +1,47 @@
-uc =8342457800658223200948690922040654696513143932798791033468223189888936895375235094809093601250403556001763163840249615856902201893959433571818006277158524569766449039156629965409806453555195066552019218212899739907311116545397250860020846426053029502983874141711258752336170792208817760733125174349697905
-hexs = ""
+from pwn import *
+from sage.all import *
 
-def decTohex(n):
-	r = n % 16;
-	global hexs
-	hexs = hexs + hex(r)[2:]
-	n //= 16
-	decTohex(n)
 
-decTohex(int(uc))
-hexs = hexs[::-1]
-print(bytearray.fromhex(hexs).decode())
+x, y = 0, 1
+
+def gcdExtended(a, b):
+	global x, y
+	if (a == 0):
+		x = 0
+		y = 1
+		return b
+	gcd = gcdExtended(b % a, a)
+	x1 = x
+	y1 = y
+	x = y1 - (b // a) * x1
+	y = x1
+	return gcd
+
+def modInverse(A, M):
+	g = gcdExtended(A, M)
+	if (g != 1):
+		print("Inverse doesn't exist")
+	else:
+		res = (x % M + M) % M
+		return res
+
+conn = remote('mercury.picoctf.net',10333)
+conn.recvuntil(b'n: ', drop=True)
+n=int(conn.recvuntil(b'\ne: ', drop=True))
+e=int(conn.recvuntil(b'\nciphertext: ', drop=True))
+c=int(conn.recvuntil(b'\n', drop=True))
+conn.recvuntil(b'decrypt: ', drop=True)
+print(n,e,c)
+
+r=power_mod(2,e,n)
+
+conn.send(bytearray((str(c*r)+"\r\n").encode('ascii')))
+conn.recvuntil(b'go: ')
+m_=int(conn.recvuntil(b'\nGive', drop=True))
+
+r_=modInverse(2, n)
+
+uc=power_mod(m_*r_,1,n)
+print(uc)
+
+print(bytearray.fromhex(format(uc, 'x')).decode())
