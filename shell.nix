@@ -7,10 +7,11 @@ pkgs.mkShell
     pkgs.python312
     pkgs.python312Packages.pip
     pkgs.python312Packages.virtualenv
+    pkgs.ghidra-bin
   ];
   
   shellHook = ''
-    source env/bin/activate
+    source .venv/bin/activate
     alias rm="trash -c always put"
   '';
 }
