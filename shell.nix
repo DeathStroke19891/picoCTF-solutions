@@ -8,6 +8,8 @@ pkgs.mkShell
     pkgs.python312Packages.pip
     pkgs.python312Packages.virtualenv
     pkgs.ghidra-bin
+    pkgs.gdb
+    pkgs.wine-wayland
   ];
   
   shellHook = ''
